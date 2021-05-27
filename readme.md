@@ -11,7 +11,7 @@ Utilize secret data algorithm to assign drivers to shipments and optimize total 
 
 By using the top secret algorithm, we can create a suitability score matrix between drivers and shipments, which in essence is a profit assignment matrix.
 
-For the calculation, we invert the profit matrix into a cost matrix, then we can apply the Kuhn-Munkres assignment algorithm to maximize sutability score across the shipment.
+For the calculation, we invert the profit matrix into a cost matrix, then we can apply the Kuhn-Munkres assignment algorithm to maximize suitability score across the shipment.
 
 ## Usage
 
