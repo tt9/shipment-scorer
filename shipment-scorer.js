@@ -1,10 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-const yargs = require('yargs');
-
-const permuteAssignment = require('./lib/algo/permute-assignment');
-const hungarianAssigment = require('./lib/algo/hungarian-assignment');
-
+const assignDrivers = require('./lib/assign-drivers');
 
 async function readInputFiles(driversFilePath, shipmentsFilePath) {
     const driverData = await fs.readFile(driversFilePath)
@@ -25,51 +21,19 @@ async function readInputFiles(driversFilePath, shipmentsFilePath) {
 
 async function run() {
 
-    const argv = yargs
-        .option('method', {
-            alias: 'm',
-            description: 'calculation method',
-            type: 'string',
-            default: 'hungarian'
-        })
-        .option('drivers', {
-            alias: 'd',
-            description: 'path to drivers file',
-            type: 'string',
-            demandOption: true
-        })
-        .option('shipments', {
-            alias: 's',
-            description: 'path to shipments file',
-            type: 'string',
-            demandOption: true
-        })
-        .help()
-        .alias('help', 'h')
-        .argv;
+    // eslint-disable-next-line no-unused-vars
+    const [$0, $1, shipments, drivers] = process.argv;
 
-
-    const { drivers, shipments } = argv;
-    let heuristic = argv.method || 'hungarian';
-
-    const driversFile = path.join(__dirname, drivers);
-    const shipmentsFile = path.join(__dirname, shipments);
+    if (!shipments || !drivers) {
+        console.error("format is <<path to shipments file>> <<path to drivers file>>");
+        return 1;
+    }
+    const driversFile = path.isAbsolute(drivers) ? drivers : path.join(__dirname, drivers);
+    const shipmentsFile = path.isAbsolute(shipments) ? shipments : path.join(__dirname, shipments);
 
     const { driversList, shipmentsList } = await readInputFiles(driversFile, shipmentsFile);
 
-    let result;
-    switch (heuristic) {
-        case 'permute':
-            result = permuteAssignment(driversList, shipmentsList);
-            break;
-        case 'hungarian':
-            result = hungarianAssigment(driversList, shipmentsList);
-            break;
-        default:
-            console.error('Heuristic must be one of "permute", "hungarian');
-            return 1;
-    }
-
+    let result = assignDrivers(driversList, shipmentsList);
 
     console.log(`Shipping Assignments: `);
     for (let i = 0; i < result.assignments.length; i++) {
@@ -80,8 +44,6 @@ async function run() {
     ---
     `);
     console.log(`Maximum Suitability Score: ${result.score}`);
-    console.log(`Method used: ${heuristic}.`);
-
 }
 
 run();

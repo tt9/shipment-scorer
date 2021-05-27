@@ -9,8 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "munkres-js": "^1.2.2",
-    "yargs": "^17.0.1"
+    "munkres-js": "^1.2.2"
   },
   "devDependencies": {
     "eslint": "^7.27.0",

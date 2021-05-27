@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const calculateDriverShipmentScore = require('../lib/util/calculate-suitability-score');
+const calculateDriverShipmentScore = require('../lib/calculate-suitability-score');
 
 
 describe('calculateDriverSuitabilityScore', function () {
